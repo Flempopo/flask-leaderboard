@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        #load-more { display: block; margin: 0 auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Player Name</th>
+                <th>Rating</th>
+                <th>Win Rate</th>
+                <th>Games Played</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+            {% for player in data %}
+            <tr>
+                <td>{{ player['rank'] }}</td>
+                <td>{{ player['name'] }}</td>
+                <td>{{ player['rating'] }}</td>
+                <td>{{ (player['wins'] / player['games']) * 100 | round(2) }}%</td>
+                <td>{{ player['games'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="load-more">Load More</button>
+
+    <script>
+        let start = 101;
+        let count = 100;
+        document.getElementById('load-more').addEventListener('click', function() {
+            fetch(`/load-more?start=${start}&count=${count}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('leaderboard-body');
+                    data.forEach(player => {
+                        const row = `<tr>
+                            <td>${player.rank}</td>
+                            <td>${player.name}</td>
+                            <td>${player.rating}</td>
+                            <td>${(player.wins / player.games * 100).toFixed(2)}%</td>
+                            <td>${player.games}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                    start += count;
+                });
+        });
+    </script>
+</body>
+</html>
