@@ -7,8 +7,9 @@
     <style>
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
-        #load-more { display: block; margin: 0 auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        th { background-color: #c19849; color: white; }
+        #load-more { display: block; margin: 0 auto; padding: 10px 20px; background-color: #c19849; color: white; border: none; cursor: pointer; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
     </style>
 </head>
 <body>
@@ -29,7 +30,7 @@
                 <td>{{ player['rank'] }}</td>
                 <td>{{ player['name'] }}</td>
                 <td>{{ player['rating'] }}</td>
-                <td>{{ (player['wins'] / player['games']) * 100 | round(2) }}%</td>
+                <td>{{ player['win_rate'] }}%</td>
                 <td>{{ player['games'] }}</td>
             </tr>
             {% endfor %}
@@ -50,7 +51,7 @@
                             <td>${player.rank}</td>
                             <td>${player.name}</td>
                             <td>${player.rating}</td>
-                            <td>${(player.wins / player.games * 100).toFixed(2)}%</td>
+                            <td>${player.win_rate}%</td>
                             <td>${player.games}</td>
                         </tr>`;
                         tbody.innerHTML += row;
